@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 use std::net::{Ipv4Addr, Ipv6Addr};
+use crate::tc::filters::flower_flags::TcFlowerOptionFlags;
 
 use netlink_packet_core::{
     emit_u16, emit_u16_be, emit_u32, emit_u32_be, parse_mac, parse_u16,
@@ -202,7 +203,7 @@ pub enum TcFilterFlowerOption {
     KeyFlags(u32),
     KeyFlagsMask(u32),
 
-    Flags(u32),
+    Flags(TcFlowerOptionFlags),
     VlanId(u16),
     VlanPrio(u8),
     VlanEthType(u16),
@@ -713,9 +714,16 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                     .context(nla_err!(TCA_FLOWER_KEY_SCTP_DST_MASK))?,
             ),
 
-            TCA_FLOWER_FLAGS => Self::Flags(
-                parse_u32(payload).context(nla_err!(TCA_FLOWER_FLAGS))?,
-            ),
+            TCA_FLOWER_FLAGS => {
+                if payload.len() != 4 {
+                    return Err(DecodeError::from("invalid flags length"));
+                }
+                let flags = NativeEndian::read_u32(payload);
+                Self::Flags(
+                    TcFlowerOptionFlags::from_bits(flags)
+                        .unwrap_or_else(TcFlowerOptionFlags::empty),
+                )
+            },
 
             TCA_FLOWER_KEY_VLAN_ID => Self::VlanId(
                 parse_u16(payload).context(nla_err!(TCA_FLOWER_KEY_VLAN_ID))?,
