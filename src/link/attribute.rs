@@ -98,9 +98,9 @@ const IFLA_PROP_LIST: u16 = 52;
 const IFLA_PERM_ADDRESS: u16 = 54;
 const IFLA_PROTO_DOWN_REASON: u16 = 55;
 const IFLA_PARENT_DEV_NAME: u16 = 56;
+const IFLA_PARENT_DEV_BUS_NAME: u16 = 57;
 
 /* TODO:(Gris Ge)
-const IFLA_PARENT_DEV_BUS_NAME: u16 = 57;
 const IFLA_GRO_MAX_SIZE: u16 = 58;
 const IFLA_TSO_MAX_SIZE: u16 = 59;
 const IFLA_TSO_MAX_SEGS: u16 = 60;
@@ -172,6 +172,7 @@ pub enum LinkAttribute {
     AfSpecBridge(Vec<AfSpecBridge>),
     AfSpecUnknown(Vec<u8>),
     ParentDevName(String),
+    ParentDevBusName(String),
     Other(DefaultNla),
 }
 
@@ -196,6 +197,7 @@ impl Nla for LinkAttribute {
 
             Self::IfName(string)
             | Self::ParentDevName(string)
+            | Self::ParentDevBusName(string)
             | Self::Qdisc(string)
             | Self::IfAlias(string)
             | Self::PhysPortName(string) => string.len() + 1,
@@ -261,6 +263,7 @@ impl Nla for LinkAttribute {
 
             Self::IfName(string)
             | Self::ParentDevName(string)
+            | Self::ParentDevBusName(string)
             | Self::Qdisc(string)
             | Self::IfAlias(string)
             | Self::PhysPortName(string) => {
@@ -343,6 +346,7 @@ impl Nla for LinkAttribute {
             Self::IfAlias(_) => IFLA_IFALIAS,
             Self::PhysPortName(_) => IFLA_PHYS_PORT_NAME,
             Self::ParentDevName(_) => IFLA_PARENT_DEV_NAME,
+            Self::ParentDevBusName(_) => IFLA_PARENT_DEV_BUS_NAME,
             Self::Mode(_) => IFLA_LINKMODE,
             Self::Carrier(_) => IFLA_CARRIER,
             Self::ProtoDown(_) => IFLA_PROTO_DOWN,
@@ -540,6 +544,10 @@ impl<'a, T: AsRef<[u8]> + ?Sized>
             IFLA_PARENT_DEV_NAME => Self::ParentDevName(
                 parse_string(payload)
                     .context("invalid IFLA_PARENT_DEV_NAME value")?,
+            ),
+            IFLA_PARENT_DEV_BUS_NAME => Self::ParentDevBusName(
+                parse_string(payload)
+                    .context("invalid IFLA_PARENT_DEV_BUS_NAME value")?,
             ),
             IFLA_LINKMODE => Self::Mode(
                 parse_u8(payload).context("invalid IFLA_LINKMODE value")?,
