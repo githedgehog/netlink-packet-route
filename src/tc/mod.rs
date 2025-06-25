@@ -11,12 +11,12 @@ mod stats;
 
 pub use self::actions::{
     TcAction, TcActionAttribute, TcActionGeneric, TcActionGenericBuffer,
-    TcActionMessage, TcActionMessageAttribute, TcActionMessageBuffer,
-    TcActionMessageFlags, TcActionMessageFlagsWithSelector, TcActionMirror,
-    TcActionMirrorOption, TcActionNat, TcActionNatOption, TcActionOption,
-    TcActionTunnelKey, TcActionTunnelKeyOption, TcActionType, TcMirror,
-    TcMirrorActionType, TcMirrorBuffer, TcNat, TcNatBuffer, TcNatFlags,
-    TcTunnelKey, Tcf,
+    TcActionGenericOption, TcActionMessage, TcActionMessageAttribute,
+    TcActionMessageBuffer, TcActionMessageFlags,
+    TcActionMessageFlagsWithSelector, TcActionMirror, TcActionMirrorOption,
+    TcActionNat, TcActionNatOption, TcActionOption, TcActionTunnelKey,
+    TcActionTunnelKeyOption, TcActionType, TcMirror, TcMirrorActionType,
+    TcMirrorBuffer, TcNat, TcNatBuffer, TcNatFlags, TcTunnelKey, Tcf,
 };
 pub use self::attribute::TcAttribute;
 pub use self::filters::{
