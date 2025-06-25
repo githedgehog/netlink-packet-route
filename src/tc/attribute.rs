@@ -24,8 +24,8 @@ const TCA_STAB: u16 = 8;
 const TCA_DUMP_INVISIBLE: u16 = 10;
 const TCA_CHAIN: u16 = 11;
 const TCA_HW_OFFLOAD: u16 = 12;
-// const TCA_INGRESS_BLOCK: u16 = 13; // TODO
-// const TCA_EGRESS_BLOCK: u16 = 14; // TODO
+const TCA_INGRESS_BLOCK: u16 = 13;
+const TCA_EGRESS_BLOCK: u16 = 14;
 
 #[derive(Debug, PartialEq, Eq, Clone)]
 #[non_exhaustive]
@@ -45,6 +45,8 @@ pub enum TcAttribute {
     Stab(Vec<u8>),
     Chain(u32),
     HwOffload(u8),
+    IngressBlock(u32),
+    EgressBlock(u32),
     DumpInvisible(bool),
     Other(DefaultNla),
 }
@@ -64,6 +66,7 @@ impl Nla for TcAttribute {
             Self::Options(ref opt) => opt.as_slice().buffer_len(),
             Self::DumpInvisible(_) => 0, // The existence of NLA means true
             Self::Other(ref attr) => attr.value_len(),
+            Self::IngressBlock(_) | Self::EgressBlock(_) => 4,
         }
     }
 
@@ -84,6 +87,9 @@ impl Nla for TcAttribute {
             Self::Options(ref opt) => opt.as_slice().emit(buffer),
             Self::DumpInvisible(_) => (),
             Self::Other(ref attr) => attr.emit_value(buffer),
+            Self::IngressBlock(id) | Self::EgressBlock(id) => {
+                buffer.copy_from_slice(&id.to_ne_bytes())
+            }
         }
     }
 
@@ -99,6 +105,8 @@ impl Nla for TcAttribute {
             Self::Stab(_) => TCA_STAB,
             Self::Chain(_) => TCA_CHAIN,
             Self::HwOffload(_) => TCA_HW_OFFLOAD,
+            Self::IngressBlock(_) => TCA_INGRESS_BLOCK,
+            Self::EgressBlock(_) => TCA_EGRESS_BLOCK,
             Self::DumpInvisible(_) => TCA_DUMP_INVISIBLE,
             Self::Other(ref nla) => nla.kind(),
         }
@@ -153,6 +161,12 @@ impl<'a, T: AsRef<[u8]> + ?Sized> ParseableParametrized<NlaBuffer<&'a T>, &str>
                 parse_u8(payload).context("failed to parse TCA_HW_OFFLOAD")?,
             ),
             TCA_DUMP_INVISIBLE => TcAttribute::DumpInvisible(true),
+            TCA_INGRESS_BLOCK => TcAttribute::IngressBlock(
+                parse_u32(payload).context("failed to parse TCA_INGRESS_BLOCK")?,
+            ),
+            TCA_EGRESS_BLOCK => TcAttribute::EgressBlock(
+                parse_u32(payload).context("failed to parse TCA_EGRESS_BLOCK")?,
+            ),
             _ => TcAttribute::Other(
                 DefaultNla::parse(buf).context("failed to parse tc nla")?,
             ),
