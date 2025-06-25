@@ -22,8 +22,8 @@ pub use self::attribute::TcAttribute;
 pub use self::filters::{
     TcFilterFlower, TcFilterFlowerMplsLseOption, TcFilterFlowerMplsOption,
     TcFilterFlowerOption, TcFilterMatchAll, TcFilterMatchAllOption,
-    TcFilterU32, TcFilterU32Option, TcU32Key, TcU32OptionFlags, TcU32Selector,
-    TcU32SelectorBuffer, TcU32SelectorFlags,
+    TcFilterU32, TcFilterU32Option, TcFlowerOptionFlags, TcU32Key,
+    TcU32OptionFlags, TcU32Selector, TcU32SelectorBuffer, TcU32SelectorFlags,
 };
 pub use self::header::{TcHandle, TcHeader, TcMessageBuffer};
 pub use self::message::TcMessage;
