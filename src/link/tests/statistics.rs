@@ -387,10 +387,7 @@ fn test_parsing_link_statistics_on_kernel_4_18() {
                 ]),
             ]),
             LinkAttribute::PropList(vec![Prop::AltIfName("enp0s3".into())]),
-            LinkAttribute::Other(DefaultNla::new(
-                56,
-                vec![118, 105, 114, 116, 105, 111, 48, 0],
-            )),
+            LinkAttribute::ParentDevName("virtio0".into()),
             LinkAttribute::Other(DefaultNla::new(
                 57,
                 vec![118, 105, 114, 116, 105, 111, 0],
@@ -720,10 +717,7 @@ fn test_parsing_link_statistics() {
                 ]),
             ]),
             LinkAttribute::PropList(vec![Prop::AltIfName("wlp0s20f3".into())]),
-            LinkAttribute::Other(DefaultNla::new(
-                56,
-                vec![48, 48, 48, 48, 58, 48, 48, 58, 49, 52, 46, 51, 0],
-            )),
+            LinkAttribute::ParentDevName("0000:00:14.3".into()),
             LinkAttribute::Other(DefaultNla::new(57, vec![112, 99, 105, 0])),
             LinkAttribute::Other(DefaultNla::new(
                 32830, // NLA_F_NESTED|IFLA_DEVLINK_PORT
