@@ -535,6 +535,7 @@ pub enum TcActionType {
     ///
     /// [`Shot`]: #variant.Shot
     Trap,
+    GotoChain(i32),
     /// Other action types not known at the time of writing or not yet
     /// supported by this library.
     Other(i32),
@@ -553,6 +554,7 @@ impl From<i32> for TcActionType {
             TC_ACT_REPEAT => Self::Repeat,
             TC_ACT_REDIRECT => Self::Redirect,
             TC_ACT_TRAP => Self::Trap,
+            x if x & (1 << 29) != 0 => Self::GotoChain(x & 0x0f_ff_ff_ff),
             _ => Self::Other(d),
         }
     }
@@ -571,6 +573,7 @@ impl From<TcActionType> for i32 {
             TcActionType::Repeat => TC_ACT_REPEAT,
             TcActionType::Redirect => TC_ACT_REDIRECT,
             TcActionType::Trap => TC_ACT_TRAP,
+            TcActionType::GotoChain(val) => val | (1 << 29),
             TcActionType::Other(d) => d,
         }
     }
