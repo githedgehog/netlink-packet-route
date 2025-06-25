@@ -2,6 +2,7 @@
 
 use super::TcFilterFlowerMplsOption;
 use crate::ip::{parse_ipv4_addr, parse_ipv6_addr};
+use crate::tc::filters::flower_flags::TcFlowerOptionFlags;
 use crate::tc::TcAction;
 use anyhow::Context;
 use byteorder::{BigEndian, ByteOrder, NativeEndian};
@@ -202,7 +203,7 @@ pub enum TcFilterFlowerOption {
     KeyFlags(u32),
     KeyFlagsMask(u32),
 
-    Flags(u32),
+    Flags(TcFlowerOptionFlags),
     VlanId(u16),
     VlanPrio(u8),
     VlanEthType(u16),
@@ -413,7 +414,7 @@ impl Nla for TcFilterFlowerOption {
             Self::KeyFlags(i) | Self::KeyFlagsMask(i) => {
                 BigEndian::write_u32(buffer, *i)
             }
-            Self::Flags(i) => NativeEndian::write_u32(buffer, *i),
+            Self::Flags(i) => NativeEndian::write_u32(buffer, i.bits()),
             Self::VlanId(i) => NativeEndian::write_u16(buffer, *i),
             Self::VlanPrio(i) => buffer[0] = *i,
             Self::VlanEthType(i) => BigEndian::write_u16(buffer, *i),
@@ -713,9 +714,16 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
                     .context(nla_err!(TCA_FLOWER_KEY_SCTP_DST_MASK))?,
             ),
 
-            TCA_FLOWER_FLAGS => Self::Flags(
-                parse_u32(payload).context(nla_err!(TCA_FLOWER_FLAGS))?,
-            ),
+            TCA_FLOWER_FLAGS => {
+                if payload.len() != 4 {
+                    return Err(DecodeError::from("invalid flags length"));
+                }
+                let flags = parse_u32(payload).context(TCA_FLOWER_FLAGS)?;
+                Self::Flags(
+                    TcFlowerOptionFlags::from_bits(flags)
+                        .unwrap_or_else(TcFlowerOptionFlags::empty),
+                )
+            }
 
             TCA_FLOWER_KEY_VLAN_ID => Self::VlanId(
                 parse_u16(payload).context(nla_err!(TCA_FLOWER_KEY_VLAN_ID))?,

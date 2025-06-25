@@ -1,5 +1,10 @@
 // SPDX-License-Identifier: MIT
 
+use crate::tc::filters::cls_flags::{
+    TCA_CLS_FLAGS_IN_HW, TCA_CLS_FLAGS_NOT_IN_HW, TCA_CLS_FLAGS_SKIP_HW,
+    TCA_CLS_FLAGS_SKIP_SW, TCA_CLS_FLAGS_VERBOSE,
+};
+
 const TC_U32_TERMINAL: u8 = 1;
 const TC_U32_OFFSET: u8 = 2;
 const TC_U32_VAROFFSET: u8 = 4;
@@ -16,12 +21,6 @@ bitflags! {
         const _ = !0;
     }
 }
-
-const TCA_CLS_FLAGS_SKIP_HW: u32 = 1 << 0;
-const TCA_CLS_FLAGS_SKIP_SW: u32 = 1 << 1;
-const TCA_CLS_FLAGS_IN_HW: u32 = 1 << 2;
-const TCA_CLS_FLAGS_NOT_IN_HW: u32 = 1 << 3;
-const TCA_CLS_FLAGS_VERBOSE: u32 = 1 << 4;
 
 bitflags! {
     #[derive(Debug, PartialEq, Eq, Clone, Copy)]

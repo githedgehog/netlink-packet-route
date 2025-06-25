@@ -4,6 +4,7 @@ use std::net::{Ipv4Addr, Ipv6Addr};
 
 use netlink_packet_utils::{Emitable, Parseable};
 
+use crate::tc::filters::TcFlowerOptionFlags;
 use crate::{
     tc::{
         TcAction, TcActionAttribute, TcActionGeneric, TcActionMirrorOption,
@@ -14,7 +15,6 @@ use crate::{
     },
     AddressFamily,
 };
-
 /*
  * struct tcmsg {}
 TCA_KIND ("u32", "flower") defining type of options under TCA_OPTIONS
@@ -243,7 +243,9 @@ fn test_get_filter_flower_mac_ipv4() {
                 TcOption::Flower(TcFilterFlowerOption::Ipv4DstMask(
                     "255.0.0.0".parse::<Ipv4Addr>().unwrap(),
                 )),
-                TcOption::Flower(TcFilterFlowerOption::Flags(1 << 3)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
                 TcOption::Flower(TcFilterFlowerOption::Actions(vec![
                     get_mirred_action(2),
@@ -344,7 +346,9 @@ fn test_get_filter_flower_ipv6_ports() {
                 TcOption::Flower(TcFilterFlowerOption::UdpSrcMask(65535)),
                 TcOption::Flower(TcFilterFlowerOption::UdpDst(137)),
                 TcOption::Flower(TcFilterFlowerOption::UdpDstMask(65535)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(1 << 3)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
                 TcOption::Flower(TcFilterFlowerOption::Actions(vec![
                     get_mirred_action(3),
@@ -411,7 +415,9 @@ fn test_get_filter_flower_ipv4_tcp_portrange() {
                 TcOption::Flower(TcFilterFlowerOption::PortDstMax(3333)),
                 TcOption::Flower(TcFilterFlowerOption::PortSrcMin(11)),
                 TcOption::Flower(TcFilterFlowerOption::PortSrcMax(2222)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -471,7 +477,9 @@ fn test_get_filter_flower_ipv4_icmp() {
                 TcOption::Flower(TcFilterFlowerOption::Icmpv4TypeMask(252)),
                 TcOption::Flower(TcFilterFlowerOption::Icmpv4Code(8)),
                 TcOption::Flower(TcFilterFlowerOption::Icmpv4CodeMask(254)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -531,7 +539,9 @@ fn test_get_filter_flower_ipv6_icmp() {
                 TcOption::Flower(TcFilterFlowerOption::Icmpv6TypeMask(252)),
                 TcOption::Flower(TcFilterFlowerOption::Icmpv6Code(8)),
                 TcOption::Flower(TcFilterFlowerOption::Icmpv6CodeMask(254)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -605,7 +615,9 @@ fn test_get_filter_flower_ct() {
                     255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255, 255,
                     255, 255, 255, 255,
                 ])),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -692,7 +704,9 @@ fn test_get_filter_flower_arp() {
                 TcOption::Flower(TcFilterFlowerOption::ArpThaMask([
                     0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x0F,
                 ])),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -754,7 +768,9 @@ fn test_get_filter_flower_vlan() {
                 TcOption::Flower(TcFilterFlowerOption::CvlanPrio(3)),
                 TcOption::Flower(TcFilterFlowerOption::VlanEthType(0x8100)),
                 TcOption::Flower(TcFilterFlowerOption::CvlanEthType(0x0800)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -812,7 +828,9 @@ fn test_get_filter_flower_mpls_uc_single() {
                 TcOption::Flower(TcFilterFlowerOption::MplsTc(5)),
                 TcOption::Flower(TcFilterFlowerOption::MplsLabel(132)),
                 TcOption::Flower(TcFilterFlowerOption::MplsBos(1)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -888,7 +906,9 @@ fn test_get_filter_flower_mpls_uc_lse() {
                         TcFilterFlowerMplsLseOption::LseLabel(44),
                     ]),
                 ])),
-                TcOption::Flower(TcFilterFlowerOption::Flags(8)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
             ]),
         ],
@@ -983,7 +1003,9 @@ fn test_get_filter_flower_ipv4_enc() {
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTosMask(255)),
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTtl(62)),
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTtlMask(255)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(1 << 3)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
                 TcOption::Flower(TcFilterFlowerOption::Actions(vec![
                     get_mirred_action(3),
@@ -1085,7 +1107,9 @@ fn test_get_filter_flower_ipv6_enc() {
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTosMask(255)),
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTtl(62)),
                 TcOption::Flower(TcFilterFlowerOption::EncKeyIpTtlMask(255)),
-                TcOption::Flower(TcFilterFlowerOption::Flags(1 << 3)),
+                TcOption::Flower(TcFilterFlowerOption::Flags(
+                    TcFlowerOptionFlags::NotInHw,
+                )),
                 TcOption::Flower(TcFilterFlowerOption::InHwCount(0)),
                 TcOption::Flower(TcFilterFlowerOption::Actions(vec![
                     get_mirred_action(3),
