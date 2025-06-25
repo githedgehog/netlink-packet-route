@@ -115,7 +115,7 @@ const TCA_ACT_INDEX: u16 = 3;
 const TCA_ACT_STATS: u16 = 4;
 // const TCA_ACT_PAD: u16 = 5;
 const TCA_ACT_COOKIE: u16 = 6;
-// const TCA_ACT_FLAGS: u16 = 7;
+const TCA_ACT_FLAGS: u16 = 7;
 // const TCA_ACT_HW_STATS: u16 = 8;
 // const TCA_ACT_USED_HW_STATS: u16 = 9;
 const TCA_ACT_IN_HW_COUNT: u16 = 10;
@@ -165,6 +165,7 @@ pub enum TcActionAttribute {
     ///
     /// [`Cookie`]: #variant.Cookie
     Cookie(Vec<u8>),
+    Flags(u32),
     /// Number of times the action has been installed in hardware.
     InHwCount(u32),
     /// Other attributes unknown at the time of writing or not yet supported by
@@ -178,7 +179,7 @@ impl Nla for TcActionAttribute {
             Self::Cookie(bytes) => bytes.len(),
             Self::Kind(k) => k.len() + 1,
             Self::Options(opt) => opt.as_slice().buffer_len(),
-            Self::Index(_) | Self::InHwCount(_) => 4,
+            Self::Flags(_) | Self::Index(_) | Self::InHwCount(_) => 4,
             Self::Stats(s) => s.as_slice().buffer_len(),
             Self::Other(attr) => attr.value_len(),
         }
@@ -193,6 +194,8 @@ impl Nla for TcActionAttribute {
             Self::Options(opt) => opt.as_slice().emit(buffer),
             Self::Index(value) | Self::InHwCount(value) => {
                 emit_u32(buffer, *value).unwrap();
+            Self::Flags(value) | Self::Index(value) | Self::InHwCount(value) => {
+                NativeEndian::write_u32(buffer, *value);
             }
             Self::Stats(s) => s.as_slice().emit(buffer),
             Self::Other(attr) => attr.emit_value(buffer),
@@ -205,6 +208,7 @@ impl Nla for TcActionAttribute {
             Self::Index(_) => TCA_ACT_INDEX,
             Self::Stats(_) => TCA_ACT_STATS,
             Self::Cookie(_) => TCA_ACT_COOKIE,
+            Self::Flags(_) => TCA_ACT_FLAGS,
             Self::InHwCount(_) => TCA_ACT_IN_HW_COUNT,
             Self::Other(nla) => nla.kind(),
         }
@@ -251,6 +255,10 @@ where
                     .collect::<Result<Vec<_>, _>>()?,
             ),
             TCA_ACT_COOKIE => TcActionAttribute::Cookie(buf.value().to_vec()),
+            TCA_ACT_FLAGS => TcActionAttribute::Flags(
+                parse_u32(buf.value())
+                    .context("failed to parse TCA_ACT_FLAGS")?,
+            ),
             TCA_ACT_IN_HW_COUNT => TcActionAttribute::InHwCount(
                 parse_u32(buf.value())
                     .context("failed to parse TCA_ACT_IN_HW_COUNT")?,
