@@ -10,8 +10,9 @@ use netlink_packet_core::{
 use zerocopy::{FromBytes, Immutable, IntoBytes, KnownLayout, Unaligned};
 
 use super::{
-    TcActionMirror, TcActionMirrorOption, TcActionNat, TcActionNatOption,
-    TcActionTunnelKey, TcActionTunnelKeyOption,
+    TcActionGenericOption, TcActionMirror, TcActionMirrorOption, TcActionNat,
+    TcActionNatOption, TcActionTunnelKey, TcActionTunnelKeyOption,
+    TcGenericAction,
 };
 use crate::tc::TcStats2;
 
@@ -276,6 +277,8 @@ where
 #[derive(Debug, PartialEq, Eq, Clone)]
 #[non_exhaustive]
 pub enum TcActionOption {
+    /// Generic action options.
+    Generic(TcActionGenericOption),
     /// Mirror options.
     ///
     /// These options can be used to mirror (copy) or redirect frames / packets
@@ -297,6 +300,7 @@ pub enum TcActionOption {
 impl Nla for TcActionOption {
     fn value_len(&self) -> usize {
         match self {
+            Self::Generic(nla) => nla.value_len(),
             Self::Mirror(nla) => nla.value_len(),
             Self::Nat(nla) => nla.value_len(),
             Self::TunnelKey(nla) => nla.value_len(),
@@ -306,6 +310,7 @@ impl Nla for TcActionOption {
 
     fn emit_value(&self, buffer: &mut [u8]) {
         match self {
+            Self::Generic(nla) => nla.emit_value(buffer),
             Self::Mirror(nla) => nla.emit_value(buffer),
             Self::Nat(nla) => nla.emit_value(buffer),
             Self::TunnelKey(nla) => nla.emit_value(buffer),
@@ -315,6 +320,7 @@ impl Nla for TcActionOption {
 
     fn kind(&self) -> u16 {
         match self {
+            Self::Generic(nla) => nla.kind(),
             Self::Mirror(nla) => nla.kind(),
             Self::Nat(nla) => nla.kind(),
             Self::TunnelKey(nla) => nla.kind(),
@@ -333,6 +339,10 @@ where
         kind: S,
     ) -> Result<Self, DecodeError> {
         Ok(match kind.as_ref() {
+            TcGenericAction::KIND => Self::Generic(
+                TcActionGenericOption::parse(buf)
+                    .context("failed to parse generic action")?,
+            ),
             TcActionMirror::KIND => Self::Mirror(
                 TcActionMirrorOption::parse(buf)
                     .context("failed to parse mirror action")?,

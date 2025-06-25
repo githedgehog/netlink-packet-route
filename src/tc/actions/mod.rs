@@ -7,6 +7,7 @@ pub use self::{
         TcAction, TcActionAttribute, TcActionGeneric, TcActionGenericBuffer,
         TcActionOption, TcActionType, Tcf, TcfBuffer,
     },
+    gact::{TcActionGenericOption, TcGenericAction},
     header::{TcActionMessageBuffer, TcActionMessageHeader},
     message::{
         TcActionMessage, TcActionMessageAttribute, TcActionMessageFlags,
@@ -21,6 +22,7 @@ pub use self::{
 };
 
 mod action;
+mod gact;
 mod header;
 mod message;
 mod mirror;
