@@ -6,6 +6,7 @@ pub use self::action::{
     TcAction, TcActionAttribute, TcActionGeneric, TcActionGenericBuffer,
     TcActionOption, TcActionType, Tcf, TcfBuffer, TC_TCF_BUF_LEN,
 };
+pub use self::gact::TcActionGenericOption;
 pub use self::header::{TcActionMessageBuffer, TcActionMessageHeader};
 pub use self::message::{
     TcActionMessage, TcActionMessageAttribute, TcActionMessageFlags,
@@ -21,6 +22,7 @@ pub use self::tunnel_key::{
 };
 
 mod action;
+mod gact;
 mod header;
 mod message;
 mod mirror;
