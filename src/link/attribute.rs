@@ -546,7 +546,7 @@ impl<'a, T: AsRef<[u8]> + ?Sized>
                 parse_string(payload)
                     .context("invalid IFLA_PARENT_DEV_BUS_NAME value")?,
             ),
-            IFLA_LINKMODE => Self::Mode(
+            IFLA_LINKMODE => Self::Mode(LinkMode::from(
                 parse_u8(payload).context("invalid IFLA_LINKMODE value")?,
             )),
             IFLA_CARRIER => Self::Carrier(
