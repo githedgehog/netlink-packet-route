@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::nla::{DefaultNla, NlaBuffer};
-use netlink_packet_utils::nla::{Nla, NlasIterator};
-use netlink_packet_utils::{DecodeError, Emitable, Parseable};
+use netlink_packet_core::{
+    parse_u32, parse_u32_be, DecodeError, DefaultNla, Emitable, ErrorContext,
+    Nla, NlaBuffer, NlasIterator, Parseable,
+};
 
 use crate::tc::actions::{TcActionMessageBuffer, TcActionMessageHeader};
 use crate::tc::TcAction;
@@ -112,13 +112,13 @@ impl<'a, T: AsRef<[u8]> + 'a + ?Sized> Parseable<NlaBuffer<&'a T>>
         if value.len() != 8 {
             return Err(DecodeError::from("invalid length"));
         }
-        let flags = TcActionMessageFlags::from_bits(u32::from_ne_bytes(
-            value[0..4].try_into().context("invalid length")?,
-        ))
+        let flags = TcActionMessageFlags::from_bits(
+            parse_u32(&value[0..4]).context("invalid length")?,
+        )
         .ok_or_else(|| DecodeError::from("invalid flags"))?;
-        let selector = TcActionMessageFlags::from_bits(u32::from_ne_bytes(
-            value[4..].try_into().context("invalid length")?,
-        ))
+        let selector = TcActionMessageFlags::from_bits(
+            parse_u32(&value[4..]).context("invalid length")?,
+        )
         .ok_or_else(|| DecodeError::from("invalid flags selector"))?;
         Ok(Self::new_with_selector(flags, selector))
     }
@@ -166,20 +166,19 @@ impl<'a, T: AsRef<[u8]> + 'a + ?Sized> Parseable<NlaBuffer<&'a T>>
                 Self::Flags(TcActionMessageFlagsWithSelector::parse(buf)?)
             }
             TCA_ROOT_COUNT => {
-                let count = u32::from_ne_bytes(
-                    buf.value().try_into().context("invalid length")?,
-                );
+                let count = parse_u32(buf.value()).context("invalid length")?;
                 Self::RootCount(count)
             }
             TCA_ROOT_TIME_DELTA => {
-                let delta = u32::from_be_bytes(
-                    buf.value().try_into().context("invalid length")?,
-                );
+                let delta =
+                    parse_u32_be(buf.value()).context("invalid length")?;
                 Self::RootTimeDelta(delta)
             }
             TCA_ROOT_EXT_WARN_MSG => {
-                let msg = String::from_utf8(buf.value().to_vec())
-                    .context("invalid utf8")?;
+                let msg =
+                    String::from_utf8(buf.value().to_vec()).map_err(|e| {
+                        DecodeError::from(format!("invalid utf8: {e}"))
+                    })?;
                 Self::RootExtWarnMsg(msg)
             }
             _ => Self::Other(DefaultNla::parse(buf)?),

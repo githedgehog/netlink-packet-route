@@ -2,7 +2,7 @@
 
 use std::net::{IpAddr, Ipv6Addr};
 
-use netlink_packet_utils::{nla::NlaBuffer, Emitable, Parseable};
+use netlink_packet_core::{Emitable, NlaBuffer, Parseable};
 
 use crate::address::{
     AddressAttribute, AddressFlags, AddressHeader, AddressHeaderFlags,

@@ -2,12 +2,11 @@
 
 use std::{mem::size_of, os::fd::RawFd};
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::{parse_i32, parse_u32, parse_u8},
-    DecodeError, Parseable,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_i32, parse_u32, parse_u8, DecodeError, DefaultNla, Nla, NlaBuffer,
+    NlasIterator, Parseable,
 };
 
 const IFLA_XDP_FD: u32 = 1;

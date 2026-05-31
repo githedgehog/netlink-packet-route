@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 
+use byteorder::{ByteOrder, NativeEndian};
 /// U32 filter
 ///
 /// In its simplest form the U32 filter is a list of records, each
@@ -7,13 +8,10 @@
 /// described below, are compared with the currently processed IP packet
 /// until the first match occurs, and then the associated action is
 /// performed.
-use anyhow::Context;
-use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::parse_u32,
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u32, DecodeError, DefaultNla, Emitable, Nla, NlaBuffer, NlasIterator,
+    Parseable,
 };
 
 use super::u32_flags::{TcU32OptionFlags, TcU32SelectorFlags};

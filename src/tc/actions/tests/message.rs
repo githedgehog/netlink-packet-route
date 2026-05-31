@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-use netlink_packet_utils::nla::{DefaultNla, NlaBuffer};
-use netlink_packet_utils::{Emitable, Parseable};
+use netlink_packet_core::{DefaultNla, NlaBuffer};
+use netlink_packet_core::{Emitable, Parseable};
 
 use crate::tc::actions::message::TcActionMessageAttribute::{
     Actions, Flags, RootCount, RootExtWarnMsg, RootTimeDelta,
@@ -16,8 +16,8 @@ use crate::tc::TcActionAttribute::{Cookie, Index, Kind};
 use crate::AddressFamily;
 
 mod mirror {
-    use netlink_packet_utils::nla::DefaultNla;
-    use netlink_packet_utils::Parseable;
+    use netlink_packet_core::DefaultNla;
+    use netlink_packet_core::Parseable;
 
     use crate::tc::actions::message::TcActionMessage;
     use crate::tc::actions::message::TcActionMessageAttribute::{

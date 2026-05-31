@@ -1,13 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
+use netlink_packet_core::ErrorContext;
 
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_i32, parse_u32},
-    traits::Parseable,
-    DecodeError,
+use netlink_packet_core::{
+    parse_i32, parse_u32, DecodeError, DefaultNla, Nla, NlaBuffer, Parseable,
 };
 
 const NETNSA_NSID: u16 = 1;

@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    DecodeError, Emitable, Parseable, ParseableParametrized,
+};
 use netlink_packet_core::{
     NetlinkDeserializable, NetlinkHeader, NetlinkPayload, NetlinkSerializable,
-};
-use netlink_packet_utils::{
-    DecodeError, Emitable, Parseable, ParseableParametrized,
 };
 
 use crate::tc::{TcActionMessage, TcActionMessageBuffer};

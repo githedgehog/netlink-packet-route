@@ -2,13 +2,11 @@
 
 use std::net::{Ipv4Addr, Ipv6Addr};
 
-use anyhow::Context;
 use byteorder::{BigEndian, ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_u16_be, parse_u32, parse_u32_be, parse_u8},
-    traits::Parseable,
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u16_be, parse_u32, parse_u32_be, parse_u8, DecodeError, DefaultNla,
+    Nla, NlaBuffer, Parseable,
 };
 
 const IFLA_GENEVE_ID: u16 = 1;

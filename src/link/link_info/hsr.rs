@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_mac, parse_u16, parse_u32, parse_u8},
-    traits::Parseable,
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_mac, parse_u16, parse_u32, parse_u8, DecodeError, DefaultNla, Nla,
+    NlaBuffer, Parseable,
 };
 
 // Kernel constant name is IFLA_HSR_SLAVE1

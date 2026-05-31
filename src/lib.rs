@@ -71,7 +71,7 @@ pub use self::ip::IpProtocol;
 pub use self::message::{RouteNetlinkMessage, RouteNetlinkMessageBuffer};
 
 #[macro_use]
-extern crate netlink_packet_utils;
+extern crate netlink_packet_core;
 
 #[cfg(test)]
 #[macro_use]

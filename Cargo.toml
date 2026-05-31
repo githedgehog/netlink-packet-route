@@ -15,13 +15,11 @@ description = "netlink packet types"
 rich_nlas = []
 
 [dependencies]
-anyhow = "1.0.102"
 bitflags = "2"
 byteorder = "1.5.0"
 libc = "0.2.186"
 log = { version = "0.4.30", features = ["std"] }
 netlink-packet-core = { version = "0.8.1" }
-netlink-packet-utils = { version = "0.5.2" }
 
 [[example]]
 name = "dump_packet_links"

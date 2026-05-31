@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-use netlink_packet_utils::nla::{NlaBuffer, NlasIterator};
-use netlink_packet_utils::{DecodeError, Emitable, Parseable};
+use netlink_packet_core::{DecodeError, Emitable, Parseable};
+use netlink_packet_core::{NlaBuffer, NlasIterator};
 
 use crate::AddressFamily;
 

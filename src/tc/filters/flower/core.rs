@@ -4,15 +4,12 @@ use super::TcFilterFlowerMplsOption;
 use crate::ip::{parse_ipv4_addr, parse_ipv6_addr};
 use crate::tc::filters::flower_flags::TcFlowerOptionFlags;
 use crate::tc::TcAction;
-use anyhow::Context;
 use byteorder::{BigEndian, ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator, NLA_F_NESTED},
-    parsers::{
-        parse_mac, parse_u16, parse_u16_be, parse_u32, parse_u32_be, parse_u8,
-    },
-    traits::Emitable,
-    DecodeError, Parseable,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_mac, parse_u16, parse_u16_be, parse_u32, parse_u32_be, parse_u8,
+    DecodeError, DefaultNla, Emitable, Nla, NlaBuffer, NlasIterator, Parseable,
+    NLA_F_NESTED,
 };
 use std::net::{Ipv4Addr, Ipv6Addr};
 

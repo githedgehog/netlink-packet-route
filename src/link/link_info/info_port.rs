@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    nla::{Nla, NlaBuffer, NlasIterator},
-    parsers::parse_string,
-    DecodeError, Emitable, Parseable,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_string, DecodeError, Emitable, Nla, NlaBuffer, NlasIterator,
+    Parseable,
 };
 
 use super::{
@@ -146,9 +145,9 @@ impl InfoPortData {
             InfoPortKind::Other(_) => Ok(InfoPortData::Other(payload.to_vec())),
         };
 
-        Ok(port_data.context(format!(
+        port_data.context(format!(
             "failed to parse IFLA_INFO_PORT_DATA (IFLA_INFO_PORT_KIND is \
              '{kind}')"
-        ))?)
+        ))
     }
 }

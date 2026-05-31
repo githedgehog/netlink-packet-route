@@ -3,7 +3,7 @@
 use std::net::{Ipv4Addr, Ipv6Addr};
 use std::str::FromStr;
 
-use netlink_packet_utils::{nla::DefaultNla, Emitable, Parseable};
+use netlink_packet_core::{DefaultNla, Emitable, Parseable};
 
 use crate::link::link_flag::LinkFlags;
 use crate::link::{

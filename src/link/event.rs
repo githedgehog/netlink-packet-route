@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    parsers::parse_u32, DecodeError, Emitable, Parseable,
-};
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{parse_u32, DecodeError, Emitable, Parseable};
 
 const IFLA_EVENT_NONE: u32 = 0;
 const IFLA_EVENT_REBOOT: u32 = 1;

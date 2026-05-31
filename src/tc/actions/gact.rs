@@ -2,10 +2,8 @@
 
 use crate::tc::actions::{TcfBuffer, TC_TCF_BUF_LEN};
 use crate::tc::{TcActionGeneric, TcActionGenericBuffer, Tcf};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::{
+    DecodeError, DefaultNla, Emitable, Nla, NlaBuffer, Parseable,
 };
 
 /// Generic action

@@ -5,13 +5,11 @@ use std::{
     ops::Deref,
 };
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::{parse_ip, parse_mac, parse_u16, parse_u32, parse_u8},
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_ip, parse_mac, parse_u16, parse_u32, parse_u8, DecodeError,
+    DefaultNla, Emitable, Nla, NlaBuffer, NlasIterator, Parseable,
 };
 
 const IFLA_BOND_AD_INFO_AGGREGATOR: u16 = 1;

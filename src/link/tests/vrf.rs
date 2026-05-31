@@ -2,8 +2,8 @@
 
 use std::net::Ipv6Addr;
 
-use netlink_packet_utils::nla::DefaultNla;
-use netlink_packet_utils::{Emitable, Parseable};
+use netlink_packet_core::DefaultNla;
+use netlink_packet_core::{Emitable, Parseable};
 
 use crate::link::link_flag::LinkFlags;
 use crate::link::link_info::InfoVrfPort;

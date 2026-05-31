@@ -2,8 +2,8 @@
 
 use std::net::Ipv4Addr;
 
-use netlink_packet_utils::nla::NlaBuffer;
-use netlink_packet_utils::{Emitable, Parseable};
+use netlink_packet_core::NlaBuffer;
+use netlink_packet_core::{Emitable, Parseable};
 
 use crate::tc::actions::message::TcActionMessage;
 use crate::tc::actions::message::TcActionMessageAttribute::Actions;

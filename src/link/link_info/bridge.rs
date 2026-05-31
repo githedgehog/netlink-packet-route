@@ -2,16 +2,12 @@
 
 use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
-use anyhow::Context;
 use byteorder::{BigEndian, ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator, NLA_F_NESTED},
-    parsers::{
-        parse_ip, parse_mac, parse_u16, parse_u16_be, parse_u32, parse_u64,
-        parse_u8,
-    },
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_ip, parse_mac, parse_u16, parse_u16_be, parse_u32, parse_u64,
+    parse_u8, DecodeError, DefaultNla, Emitable, Nla, NlaBuffer, NlasIterator,
+    Parseable, NLA_F_NESTED,
 };
 
 const IFLA_BR_FORWARD_DELAY: u16 = 1;

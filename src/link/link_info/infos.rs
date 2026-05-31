@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::parse_string,
-    DecodeError, Emitable, Parseable, ParseableParametrized,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_string, DecodeError, DefaultNla, Emitable, Nla, NlaBuffer,
+    NlasIterator, Parseable, ParseableParametrized,
 };
 
 use super::super::{InfoData, InfoPortData, InfoPortKind, LinkXstats};

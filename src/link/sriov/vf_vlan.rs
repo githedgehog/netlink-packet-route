@@ -1,9 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    DecodeError, Emitable, Parseable,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    DecodeError, DefaultNla, Emitable, Nla, NlaBuffer, Parseable,
 };
 
 use crate::link::VlanProtocol;

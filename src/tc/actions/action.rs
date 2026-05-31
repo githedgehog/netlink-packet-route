@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::nla::NLA_F_NESTED;
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::{parse_string, parse_u32},
-    traits::{Emitable, Parseable, ParseableParametrized},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::NLA_F_NESTED;
+use netlink_packet_core::{
+    parse_string, parse_u32, DecodeError, DefaultNla, Emitable, Nla, NlaBuffer,
+    NlasIterator, Parseable, ParseableParametrized,
 };
 
 use crate::tc::actions::gact::{TcActionGenericOption, TcGenericAction};

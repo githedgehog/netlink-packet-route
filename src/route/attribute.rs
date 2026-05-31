@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_u16, parse_u32, parse_u64, parse_u8},
-    traits::{Emitable, Parseable, ParseableParametrized},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u16, parse_u32, parse_u64, parse_u8, DecodeError, DefaultNla,
+    Emitable, Nla, NlaBuffer, Parseable, ParseableParametrized,
 };
 
 use super::{

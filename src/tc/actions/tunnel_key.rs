@@ -1,17 +1,15 @@
 // SPDX-License-Identifier: MIT
 
 use crate::ip::{parse_ipv4_addr, parse_ipv6_addr};
-use anyhow::Context;
 /// set tunnel key
 ///
 /// The set_tunnel action allows to set tunnel encap applied
 /// at the last stage of action processing
 use byteorder::{BigEndian, ByteOrder};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_u16_be, parse_u32_be, parse_u8},
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u16_be, parse_u32_be, parse_u8, DecodeError, DefaultNla, Emitable,
+    Nla, NlaBuffer, Parseable,
 };
 use std::net::{Ipv4Addr, Ipv6Addr};
 

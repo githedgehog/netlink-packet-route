@@ -1,10 +1,7 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer},
-    DecodeError, Parseable,
-};
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{DecodeError, DefaultNla, Nla, NlaBuffer, Parseable};
 use std::net::{IpAddr, Ipv6Addr};
 
 use crate::ip::{emit_ip_addr, parse_ipv6_addr};
@@ -200,7 +197,7 @@ impl<'a, T: AsRef<[u8]> + ?Sized> Parseable<NlaBuffer<&'a T>>
 {
     fn parse(
         buf: &NlaBuffer<&'a T>,
-    ) -> Result<Self, netlink_packet_utils::DecodeError> {
+    ) -> Result<Self, netlink_packet_core::DecodeError> {
         let payload = buf.value();
         Ok(match buf.kind() {
             SEG6_IPTUNNEL_SRH => {

@@ -4,8 +4,8 @@ use crate::tc::{
     TcAction, TcActionAttribute, TcActionGeneric, TcActionGenericBuffer,
     TcActionType, TcStats2, TcStatsBasic,
 };
-use netlink_packet_utils::nla::NlaBuffer;
-use netlink_packet_utils::{Emitable, Parseable};
+use netlink_packet_core::NlaBuffer;
+use netlink_packet_core::{Emitable, Parseable};
 
 #[test]
 fn tc_action_generic_parse_back() {

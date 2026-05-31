@@ -1,10 +1,9 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    traits::{Parseable, ParseableParametrized},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    DecodeError, DefaultNla, Nla, NlaBuffer, NlasIterator, Parseable,
+    ParseableParametrized,
 };
 
 use super::{

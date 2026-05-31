@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{BigEndian, ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::{parse_u16, parse_u16_be, parse_u32},
-    traits::{Emitable, Parseable},
-    DecodeError,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u16, parse_u16_be, parse_u32, DecodeError, DefaultNla, Emitable, Nla,
+    NlaBuffer, NlasIterator, Parseable,
 };
 
 use crate::link::VlanProtocol;

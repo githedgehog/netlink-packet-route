@@ -2,12 +2,11 @@
 
 use std::net::IpAddr;
 
-use anyhow::Context;
-use netlink_packet_utils::{
-    byteorder::{ByteOrder, NativeEndian},
-    nla::{DefaultNla, Nla, NlaBuffer},
-    parsers::{parse_string, parse_u32, parse_u8},
-    DecodeError, Emitable, Parseable,
+use byteorder::{ByteOrder, NativeEndian};
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_string, parse_u32, parse_u8, DecodeError, DefaultNla, Emitable, Nla,
+    NlaBuffer, Parseable,
 };
 
 use crate::{

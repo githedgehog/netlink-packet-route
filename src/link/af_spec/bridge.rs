@@ -1,12 +1,10 @@
 // SPDX-License-Identifier: MIT
 
-use anyhow::Context;
 use byteorder::{ByteOrder, NativeEndian};
-use netlink_packet_utils::{
-    nla::{DefaultNla, Nla, NlaBuffer, NlasIterator},
-    parsers::{parse_u16, parse_u32},
-    traits::Parseable,
-    DecodeError, Emitable,
+use netlink_packet_core::ErrorContext;
+use netlink_packet_core::{
+    parse_u16, parse_u32, DecodeError, DefaultNla, Emitable, Nla, NlaBuffer,
+    NlasIterator, Parseable,
 };
 
 const IFLA_BRIDGE_FLAGS: u16 = 0;

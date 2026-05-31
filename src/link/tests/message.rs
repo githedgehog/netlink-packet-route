@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-use netlink_packet_utils::traits::{Emitable, ParseableParametrized};
+use netlink_packet_core::{Emitable, ParseableParametrized};
 
 use crate::link::link_flag::LinkFlags;
 use crate::link::{
